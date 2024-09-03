@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.square.retrofit) // HTTP Client
     implementation(libs.square.converter.gson) // JSON Converter
     implementation(libs.coil.compose) // Image Loader
+    implementation(libs.androidx.navigation) // Navigation
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
