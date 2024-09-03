@@ -1,6 +1,7 @@
 package com.rangerforce.recipeapp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,7 +25,10 @@ import coil.compose.rememberAsyncImagePainter
 import com.rangerforce.recipeapp.ui.theme.RecipeAppTheme
 
 @Composable
-fun RecipeScreen(modifier: Modifier = Modifier) {
+fun RecipeScreen(
+    modifier: Modifier = Modifier,
+    handleClick: (Category) -> Unit,
+) {
     val mainViewModel: MainViewModel = viewModel()
     val viewState = mainViewModel.category
 
@@ -37,30 +41,37 @@ fun RecipeScreen(modifier: Modifier = Modifier) {
                 ErrorView(errorMessage = viewState.value.error)
             }
             viewState.value.recipes.isNotEmpty() -> {
-                RecipeListView(categories = viewState.value.recipes)
+                RecipeListView(categories = viewState.value.recipes, handleClick = handleClick)
             }
         }
     }
 }
 
 @Composable
-fun RecipeListView(categories: List<Category>) {
+fun RecipeListView(
+    categories: List<Category>,
+    handleClick: (Category) -> Unit,
+) {
     Box {
         LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()) {
             items(categories) { category ->
-                CategoryItem(category = category)
+                CategoryItem(category = category, handleClick = handleClick)
             }
         }
     }
 }
 
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(
+    category: Category,
+    handleClick: (Category) -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
+            .clickable { handleClick(category) }
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = category.thumbnailUrl),
@@ -96,6 +107,6 @@ fun ErrorView(errorMessage: String?) {
 @Composable
 fun DefaultPreview() {
     RecipeAppTheme {
-        RecipeScreen()
+        RecipeScreen(handleClick = {})
     }
 }
